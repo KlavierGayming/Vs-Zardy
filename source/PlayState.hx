@@ -1308,10 +1308,18 @@ class PlayState extends MusicBeatState
 
 	var keys = [false, false, false, false];
 
+	#if desktop
 	private function releaseInput(evt:KeyboardEvent):Void // handles releases
+	#else
+	private function releaseCheck(evt:Int):Void
+	#end
 	{
 		@:privateAccess
-		var key = FlxKey.toStringMap.get(evt.keyCode);
+		#if desktop
+		var key = FlxKey.toStringMap.get(Keyboard.__convertKeyCode(evt.keyCode));
+		#else
+		var key = evt;
+		#end
 
 		var binds:Array<String> = [
 			FlxG.save.data.leftBind,
@@ -1322,6 +1330,7 @@ class PlayState extends MusicBeatState
 
 		var data = -1;
 
+		#if desktop
 		switch (evt.keyCode) // arrow keys
 		{
 			case 37:
@@ -1333,12 +1342,19 @@ class PlayState extends MusicBeatState
 			case 39:
 				data = 3;
 		}
+		#else
+		data = evt;
+		#end
 
+		//if (FlxG.save.data.Binded){
+		#if desktop
 		for (i in 0...binds.length) // binds
 		{
 			if (binds[i].toLowerCase() == key.toLowerCase())
 				data = i;
 		}
+		#end
+		//}
 
 		if (data == -1)
 			return;
@@ -1348,11 +1364,14 @@ class PlayState extends MusicBeatState
 
 	public var closestNotes:Array<Note> = [];
 	
-
+	#if desktop
 	private function handleInput(evt:KeyboardEvent):Void
+	#else
+	private function inputCheck(evt:Int):Void
+	#end
 	{ // this actually handles press inputs
 
-		if (PlayStateChangeables.botPlay || loadRep || paused || grabbed)
+		if (PlayStateChangeables.botPlay || loadRep || paused)
 			return;
 
 		// first convert it from openfl to a flixel key code
@@ -1360,7 +1379,11 @@ class PlayState extends MusicBeatState
 		// this makes it work for special characters
 
 		@:privateAccess
-		var key = FlxKey.toStringMap.get(evt.keyCode);
+		#if desktop
+		var key = FlxKey.toStringMap.get(Keyboard.__convertKeyCode(evt.keyCode));
+		#else
+		var key:Int= evt;
+		#end
 
 		var binds:Array<String> = [
 			FlxG.save.data.leftBind,
@@ -1371,6 +1394,7 @@ class PlayState extends MusicBeatState
 
 		var data = -1;
 
+		#if desktop
 		switch (evt.keyCode) // arrow keys
 		{
 			case 37:
@@ -1382,22 +1406,25 @@ class PlayState extends MusicBeatState
 			case 39:
 				data = 3;
 		}
+		#else
+		data = evt;
+		#end
 
+		//if (FlxG.save.data.Binded){
+		#if desktop
 		for (i in 0...binds.length) // binds
 		{
 			if (binds[i].toLowerCase() == key.toLowerCase())
 				data = i;
 		}
+		#end
+		//}
+
 		if (data == -1)
-		{
-			trace("couldn't find a keybind with the code " + key);
 			return;
-		}
+
 		if (keys[data])
-		{
-			trace("ur already holding " + key);
 			return;
-		}
 
 		keys[data] = true;
 
@@ -1415,19 +1442,25 @@ class PlayState extends MusicBeatState
 
 		var dataNotes = [];
 		for(i in closestNotes)
-			if (i.noteData == data && !i.isSustainNote)
+			if (i.noteData == data)
 				dataNotes.push(i);
 
-		trace("notes able to hit for " + key.toString() + " " + dataNotes.length);
+		trace("notes able to hit for " + key#if desktop .toString() #end + " " + dataNotes.length);
 
 		if (dataNotes.length != 0)
 		{
 			var coolNote = null;
 
 			for (i in dataNotes)
+				if (!i.isSustainNote)
+				{
+					coolNote = i;
+					break;
+				}
+
+			if (coolNote == null) // Note is null, which means it's probably a sustain note. Update will handle this (HOPEFULLY???)
 			{
-				coolNote = i;
-				break;
+				return;
 			}
 
 			if (dataNotes.length > 1) // stacked notes or really close ones
@@ -1439,7 +1472,7 @@ class PlayState extends MusicBeatState
 
 					var note = dataNotes[i];
 
-					if (!note.isSustainNote && ((note.strumTime - coolNote.strumTime ) < 2) && note.noteData == data)
+					if (!note.isSustainNote && (note.strumTime - coolNote.strumTime ) < 2)
 					{
 						trace('found a stacked/really close note ' + (note.strumTime  - coolNote.strumTime ));
 						// just fuckin remove it since it's a stacked note and shouldn't be there
@@ -1453,7 +1486,7 @@ class PlayState extends MusicBeatState
 			goodNoteHit(coolNote);
 			var noteDiff:Float = -(coolNote.strumTime - Conductor.songPosition);
 			ana.hit = true;
-			ana.hitJudge = Ratings.judgeNote(noteDiff);
+			ana.hitJudge = Ratings.judgeNote(coolNote);
 			ana.nearestNote = [coolNote.strumTime, coolNote.noteData, coolNote.sustainLength];
 		}
 		else if (!FlxG.save.data.ghost && songStarted)
@@ -2149,6 +2182,10 @@ class PlayState extends MusicBeatState
 	{
 		#if !debug
 		perfectMode = false;
+		#end
+		#if (mobile || android)
+		if (generatedMusic)
+			mobileInput();
 		#end
 
 
@@ -3524,6 +3561,36 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 	}
+	#if mobile
+	function mobileInput(){
+		//presses
+		if (controls.RIGHT_P)
+			inputCheck(3);
+		
+		if (controls.LEFT_P)
+			inputCheck(0);
+		
+		if (controls.UP_P)
+			inputCheck(2);
+		
+		if (controls.DOWN_P)
+			inputCheck(1);
+
+		//releases
+		if (controls.RIGHT_R)
+			releaseCheck(3);
+		
+		if (controls.LEFT_R)
+			releaseCheck(0);
+		
+		if (controls.UP_R)
+			releaseCheck(2);
+		
+		if (controls.DOWN_R)
+			releaseCheck(1);
+		
+	}
+	#end
 
 	public function getSectionByTime(ms:Float):SwagSection
 		{
