@@ -58,7 +58,8 @@ class MP4Handler
 		nc.addEventListener("netStatus", netConnection_onNetStatus);
 
 		netStream.play(path);
-		#else
+		#end
+		#if windows
 		finishCallback = callback;
 
 		vlcBitmap = new VlcBitmap();

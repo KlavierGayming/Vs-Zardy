@@ -35,6 +35,7 @@
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
+	<define name='mobileC' if='mobile'/>
 
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
@@ -102,15 +103,15 @@
 	<haxelib name="hscript" />
 
 	<haxelib name="actuate" />
-	<haxelib name="extension-webm"/> <!-- Make sure to use https://github.com/KadeDev/extension-webm/ -->
+	<haxelib name="extension-webm-2"/> <!-- Make sure to use https://github.com/KadeDev/extension-webm/ -->
 
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
-	<haxelib name="newgrounds"/>
+	<haxelib name="newgrounds" unless='mobile'/>
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="polymod"/>
 	<haxelib name="discord_rpc" if="desktop"/>
-	<haxelib name="linc_luajit"/>
+	<haxelib name="linc_luajit-android"/>
 	<haxelib name="hxvm-luajit" if="desktop"/>
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 
