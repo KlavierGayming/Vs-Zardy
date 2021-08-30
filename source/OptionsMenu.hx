@@ -26,18 +26,14 @@ class OptionsMenu extends MusicBeatState
 
 	var options:Array<OptionCategory> = [
 		new OptionCategory("Gameplay", [
-			new DFJKOption(controls),
+			new DFJKOption("Custom mobile controls."),
 			new DownscrollOption("Toggle making the notes scroll down rather than up."),
 			new GhostTapOption("Toggle counting pressing a directional input when no arrow is there as a miss."),
 			new Judgement("Customize your Hit Timings. (LEFT or RIGHT)"),
-			#if desktop
 			new FPSCapOption("Change your FPS Cap."),
-			#end
 			new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 			new AccuracyDOption("Change how accuracy is calculated. (Accurate = Simple, Complex = Milisecond Based)"),
-			new ResetButtonOption("Toggle pressing R to gameover."),
 			new InstantRespawn("Toggle if you instantly respawn after dying."),
-			// new OffsetMenu("Get a note offset based off of your inputs!"),
 			new CustomizeGameplay("Drag and drop gameplay modules to your prefered positions!")
 		]),
 		new OptionCategory("Appearance", [
@@ -62,7 +58,6 @@ class OptionsMenu extends MusicBeatState
 			new ScoreScreen("Show the score screen after the end of a song"),
 			new ShowInput("Display every single input on the score screen."),
 			//new Optimization("No characters or backgrounds. Just a usual rhythm game layout."),
-			new GraphicLoading("On startup, cache every character. Significantly decrease load times. (HIGH MEMORY)"),
 			new BotPlay("Showcase your charts and mods with autoplay.")
 		]),
 		
