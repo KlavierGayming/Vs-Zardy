@@ -75,12 +75,11 @@ class LuaClass {
     Lua.settable(l,mtIdx);
 
     Lua.setmetatable(l,classIdx);
-
   };
 
 
   public static function index(l:StatePointer):Int{
-    var l = state;
+        var l = state;
     var index = Lua.tostring(l,-1);
     if(Lua.getmetatable(l,-2)!=0){
       var mtIdx = Lua.gettop(l);
@@ -102,7 +101,7 @@ class LuaClass {
   }
 
   public static function newindex(l:StatePointer):Int{
-    var l = state;
+        var l = state;
     var index = Lua.tostring(l,2);
     if(Lua.getmetatable(l,1)!=0){
       var mtIdx = Lua.gettop(l);
@@ -125,7 +124,7 @@ class LuaClass {
   }
 
   public static function SetProperty(l:State,tableIndex:Int,key:String,value:Any){
-    Lua.pushstring(l,key + "PropertyData");
+        Lua.pushstring(l,key + "PropertyData");
     Convert.toLua(l,value);
     Lua.settable(l,tableIndex  );
 
@@ -133,7 +132,7 @@ class LuaClass {
   }
 
   public static function DefaultSetter(l:State){
-    var key = Lua.tostring(l,2);
+        var key = Lua.tostring(l,2);
 
     Lua.pushstring(l,key + "PropertyData");
     Lua.pushvalue(l,3);
@@ -145,10 +144,10 @@ class LuaClass {
 }
 
 class LuaNote extends LuaClass { // again, stolen from andromeda but improved a lot for better thinking interoperability (I made that up)
-    private static var state:State;
+        private static var state:State;
     public var note:Note;
     public function new(connectedNote:Note, index:Int){ 
-      super();
+          super();
       className= "note_" + index;
 
       note = connectedNote;
@@ -368,7 +367,7 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
       }
   
       private static function tweenPos(l:StatePointer):Int{
-        // 1 = self
+                // 1 = self
         // 2 = x
         // 3 = y
         // 4 = time
@@ -393,10 +392,11 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
         FlxTween.tween(note,{x: xp,y:yp},time);
   
         return 0;
+  
       }
   
       private static function tweenAngle(l:StatePointer):Int{
-        // 1 = self
+                // 1 = self
         // 2 = angle
         // 3 = time
         var nangle = LuaL.checknumber(state,2);
@@ -419,10 +419,11 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
         FlxTween.tween(note,{modAngle: nangle},time);
   
         return 0;
+  
       }
   
       private static function tweenAlpha(l:StatePointer):Int{
-        // 1 = self
+                // 1 = self
         // 2 = alpha
         // 3 = time
         var nalpha = LuaL.checknumber(state,2);
@@ -444,14 +445,15 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
         FlxTween.tween(note,{alpha: nalpha},time);
   
         return 0;
-      }
   
-      private static var tweenPosC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(tweenPos);
+      }
+            private static var tweenPosC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(tweenPos);
       private static var tweenAngleC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(tweenAngle);
       private static var tweenAlphaC:cpp.Callable<StatePointer->Int> = cpp.Callable.fromStaticFunction(tweenAlpha);
 
+
     private function SetNumProperty(l:State){
-      // 1 = self
+            // 1 = self
       // 2 = key
       // 3 = value
       // 4 = metatable
@@ -462,20 +464,22 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
       note.modifiedByLua = true;
       Reflect.setProperty(note,Lua.tostring(l,2),Lua.tonumber(l,3));
       return 0;
+
     }
 
     override function Register(l:State){
-      state=l;
+            state=l;
       super.Register(l);
+
     }
   }
 
   class LuaReceptor extends LuaClass { // again, stolen from andromeda but improved a lot for better thinking interoperability (I made that up)
-    private static var state:State;
+        private static var state:State;
     public var sprite:StaticArrow;
     public function new(connectedSprite:StaticArrow, name:String){ 
       super();
-      var defaultY = connectedSprite.y;
+            var defaultY = connectedSprite.y;
       var defaultX = connectedSprite.x;
       var defaultAngle = connectedSprite.angle;
 
@@ -618,6 +622,7 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
         }
         
       ];
+
     }
 
     private static function findReceptor(index:Int)
@@ -633,7 +638,7 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
     }
 
     private static function tweenPos(l:StatePointer):Int{
-      // 1 = self
+            // 1 = self
       // 2 = x
       // 3 = y
       // 4 = time
@@ -655,6 +660,7 @@ class LuaNote extends LuaClass { // again, stolen from andromeda but improved a 
       FlxTween.tween(receptor,{x: xp,y:yp},time);
 
       return 0;
+
     }
 
     private static function tweenAngle(l:StatePointer):Int{

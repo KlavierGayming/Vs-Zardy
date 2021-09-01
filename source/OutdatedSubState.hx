@@ -44,15 +44,13 @@ class OutdatedSubState extends MusicBeatState
 		kadeLogo.antialiasing = FlxG.save.data.antialiasing;
 		add(kadeLogo);
 		
-		var txt:FlxText = new FlxText(0, 0, FlxG.width,
-			"Your Kade Engine is outdated!\nYou are on "
-			+ MainMenuState.kadeEngineVer
-			+ "\nwhile the most recent version is " + needVer + "."
-			+ "\n\nWhat's new:\n\n"
-			+ currChanges
-			+ "\n& more changes and bugfixes in the full changelog"
-			+ "\n\nPress Space to view the full changelog and update\nor ESCAPE to ignore this",
-			32);
+		var txt:FlxText = new FlxText(0, 0, FlxG.width, 
+		"Why hello there" 
+		+ "\n\nThis was ported by Klav, Zack and Lucky." 
+		+ "\nif i see anyone see stealing (im looking at you zarif :eyes:)" 
+		+ "\ni'll raid your server(if you have one, once again im looking at you zarif :eyes:)" 
+		+ "\n\ntap the screen to ignore this :sugnlas:",
+		32);
 
 		if (MainMenuState.nightly != "")
 			txt.text = 
@@ -102,7 +100,12 @@ class OutdatedSubState extends MusicBeatState
 			leftState = true;
 			FlxG.switchState(new MainMenuState());
 		}
-		if (controls.BACK)
+		var justTapped:Bool = false;
+		for (i in FlxG.touches.list)
+		{
+			justTapped = i.justPressed;
+		}
+		if (controls.BACK || justTapped)
 		{
 			leftState = true;
 			FlxG.switchState(new MainMenuState());

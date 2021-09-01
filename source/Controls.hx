@@ -267,17 +267,16 @@ class Controls extends FlxActionSet
 		setKeyboardScheme(scheme, false);
 	}
 	#end
-
 	public var trackedinputs:Array<FlxActionInput> = [];
 
 	public function addbutton(action:FlxActionDigital, button:flixel.ui.FlxButton, state:FlxInputState) {
 		var input = new FlxActionInputDigitalIFlxInput(button, state);
 		trackedinputs.push(input);
-		
+
 		action.add(input);
 		//action.addInput(button, state);
 	}
-	
+
 	public function setHitBox(hitbox:Hitbox) 
 	{
 		inline forEachBound(Control.UP, (action, state) -> addbutton(action, hitbox.buttonUp, state));
@@ -286,13 +285,13 @@ class Controls extends FlxActionSet
 		inline forEachBound(Control.RIGHT, (action, state) -> addbutton(action, hitbox.buttonRight, state));	
 	}
 
-	
+
 	public function setVirtualPad(virtualPad:FlxVirtualPad, ?DPad:FlxDPadMode, ?Action:FlxActionMode) {
 		if (DPad == null)
 			DPad = NONE;
 		if (Action == null)
 			Action = NONE;
-		
+
 		switch (DPad)
 		{
 			case UP_DOWN:
@@ -310,7 +309,7 @@ class Controls extends FlxActionSet
 				inline forEachBound(Control.DOWN, (action, state) -> addbutton(action, virtualPad.buttonDown, state));
 				inline forEachBound(Control.LEFT, (action, state) -> addbutton(action, virtualPad.buttonLeft, state));
 				inline forEachBound(Control.RIGHT, (action, state) -> addbutton(action, virtualPad.buttonRight, state));
-			
+
 			case NONE:
 		}
 
@@ -330,13 +329,13 @@ class Controls extends FlxActionSet
 			case NONE:
 		}
 	}
-	
+
 
 	public function removeFlxInput(Tinputs:Array<FlxActionInput>) {
 		for (action in this.digitalActions)
 		{
 			var i = action.inputs.length;
-			
+
 			while (i-- > 0)
 			{
 				var input = action.inputs[i];
@@ -350,7 +349,6 @@ class Controls extends FlxActionSet
 			}
 		}
 	}
-
 	override function update()
 	{
 		super.update();

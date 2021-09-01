@@ -86,13 +86,13 @@ class DFJKOption extends Option
 
 	public override function press():Bool
 	{
-		OptionsMenu.instance.openSubState(new KeyBindMenu());
+		FlxG.switchState(new CustomControlsState());
 		return false;
 	}
 
 	private override function updateDisplay():String
 	{
-		return "Key Bindings";
+		return "Mobile Controls";
 	}
 }
 

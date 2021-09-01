@@ -15,6 +15,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
+import FlxVirtualPad;
 
 #if windows
 import Discord.DiscordClient;
@@ -54,6 +55,8 @@ class MainMenuState extends MusicBeatState
 	public var scoreText:FlxText;
 	public var scoreBG:FlxSprite;
 	public var rateText:FlxText;
+
+	var pad:FlxVirtualPad;
 
 	override function create()
 	{
@@ -227,7 +230,10 @@ class MainMenuState extends MusicBeatState
 			controls.setKeyboardScheme(KeyboardScheme.Duo(true), true);
 
 		changeItem();
-
+		pad = new FlxVirtualPad(UP_DOWN, A_B);
+		#if mobileC
+		add(pad);
+		#end
 		super.create();
 	}
 
@@ -271,19 +277,19 @@ class MainMenuState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.justPressed.UP)
+			if (controls.DOWN_P || pad.buttonUp.justPressed)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
 			}
 
-			if (FlxG.keys.justPressed.DOWN)
+			if (controls.UP_P || pad.buttonDown.justPressed)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
 			}
 
-			if (controls.BACK)
+			if (controls.BACK || pad.buttonB.justPressed)
 			{
 				if (type)
 				{
@@ -307,7 +313,7 @@ class MainMenuState extends MusicBeatState
 					rate = 0.5;
 			}
 
-			if (controls.ACCEPT)
+			if (controls.ACCEPT || pad.buttonA.justPressed)
 			{
 				if (optionShit[curSelected] == 'plush')
 				{

@@ -61,17 +61,11 @@ class TitleState extends MusicBeatState
 		{
 			trace("Loaded " + openfl.Assets.getLibrary("default").assetsLoaded + " assets (DEFAULT)");
 		}
-		
-		#if !cpp
-
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		PlayerSettings.init();
 
 		KadeEngineData.initSave();
-		
-		#end
-
 				
 		Highscore.load();
 
@@ -85,11 +79,6 @@ class TitleState extends MusicBeatState
 		super.create();
 
 		// NGio.noLogin(APIStuff.API);
-
-		#if ng
-		var ng:NGio = new NGio(APIStuff.API, APIStuff.EncKey);
-		trace('NEWGROUNDS LOL');
-		#end
 
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
@@ -276,7 +265,7 @@ class TitleState extends MusicBeatState
 
 		var pressedEnter:Bool = controls.ACCEPT;
 
-		#if mobile
+		#if mobileC
 		for (touch in FlxG.touches.list)
 		{
 			if (touch.justPressed)
@@ -310,7 +299,7 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
-				FlxG.switchState(new MainMenuState());
+				FlxG.switchState(new OutdatedSubState());
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}

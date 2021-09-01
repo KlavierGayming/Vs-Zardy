@@ -38,8 +38,6 @@ class ResultsScreen extends FlxSubState
     public var text:FlxText;
 
     public var anotherBackground:FlxSprite;
-    public var graph:HitGraph;
-    public var graphSprite:OFLSprite;
 
     public var comboText:FlxText;
     public var contText:FlxText;
@@ -47,23 +45,13 @@ class ResultsScreen extends FlxSubState
 
     public var music:FlxSound;
 
-    public var graphData:BitmapData;
 
+    
     public var ranking:String;
     public var accuracy:String;
 
 	override function create()
-	{	
-        if (PlayState.Stage.curStage == "zardyBruh")
-            {
-                PlayState.instance.backgroundVideo("vineShit");
-                PlayState.instance.videoSprite.alpha = 0;
-                PlayState.instance.videoSprite.setGraphicSize(Std.int(PlayState.instance.videoSprite.width * 1.4));
-                PlayState.instance.videoSprite.x = -100;
-                PlayState.instance.videoSprite.y = -100;
-                PlayState.instance.add(PlayState.instance.videoSprite);
-                FlxTween.tween(PlayState.instance.videoSprite,{alpha: 1},3);
-            }
+	{
         background = new FlxSprite(0,0).makeGraphic(FlxG.width,FlxG.height,FlxColor.BLACK);
         background.scrollFactor.set();
         add(background);
@@ -116,16 +104,6 @@ class ResultsScreen extends FlxSubState
         anotherBackground.scrollFactor.set();
         anotherBackground.alpha = 0;
         add(anotherBackground);
-        
-        graph = new HitGraph(FlxG.width - 500,45,495,240);
-        graph.alpha = 0;
-
-        graphSprite = new OFLSprite(FlxG.width - 510,45,460,240,graph);
-
-        graphSprite.scrollFactor.set();
-        graphSprite.alpha = 0;
-        
-        add(graphSprite);
 
 
         var sicks = HelperFunctions.truncateFloat(PlayState.sicks / PlayState.goods,1);
@@ -139,32 +117,11 @@ class ResultsScreen extends FlxSubState
         var mean:Float = 0;
 
 
-        for (i in 0...PlayState.rep.replay.songNotes.length)
-        {
-            // 0 = time
-            // 1 = length
-            // 2 = type
-            // 3 = diff
-            var obj = PlayState.rep.replay.songNotes[i];
-            // judgement
-            var obj2 = PlayState.rep.replay.songJudgements[i];
-
-            var obj3 = obj[0];
-
-            var diff = obj[3];
-            var judge = obj2;
-            if (diff != (166 * Math.floor((PlayState.rep.replay.sf / 60) * 1000) / 166))
-                mean += diff;
-            if (obj[1] != -1)
-                graph.addToHistory(diff / PlayState.songMultiplier, judge, obj3 / PlayState.songMultiplier);
-        }
 
         if (sicks == Math.POSITIVE_INFINITY || sicks == Math.NaN)
             sicks = 0;
         if (goods == Math.POSITIVE_INFINITY || goods == Math.NaN)
             goods = 0;
-
-        graph.update();
 
         mean = HelperFunctions.truncateFloat(mean / PlayState.rep.replay.songNotes.length,2);
 
@@ -181,10 +138,7 @@ class ResultsScreen extends FlxSubState
         FlxTween.tween(comboText, {y:145},0.5,{ease: FlxEase.expoInOut});
         FlxTween.tween(contText, {y:FlxG.height - 45},0.5,{ease: FlxEase.expoInOut});
         FlxTween.tween(settingsText, {y:FlxG.height - 35},0.5,{ease: FlxEase.expoInOut});
-        FlxTween.tween(anotherBackground, {alpha: 0.6},0.5, {onUpdate: function(tween:FlxTween) {
-            graph.alpha = FlxMath.lerp(0,1,tween.percent);
-            graphSprite.alpha = FlxMath.lerp(0,1,tween.percent);
-        }});
+        FlxTween.tween(anotherBackground, {alpha: 0.6},0.5);
 
         cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 

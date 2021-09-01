@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Kade Engine" file="Kade Engine" packageName="com.kadedev.kadeengine" package="com.kadedev.kadeengine" main="Main" version="0.2.7.1" company="kadedev" />
+	<app title="VS Zardy" file="zard" packageName="com.kadedev.zady" package="com.kadedev.zady" main="Main" version="0.2.7.1" company="kadedev" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -45,6 +45,7 @@
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web"/>
+	<assets path="assets/shared/images/hitbox"/>
 	
 	<!-- <define name="PRELOAD_ALL" /> -->
 	<define name="PRELOAD_ALL" unless="web" />
@@ -114,6 +115,9 @@
 	<haxelib name="linc_luajit-android"/>
 	<haxelib name="hxvm-luajit" if="desktop"/>
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
+
+	<architecture name="armv7" exclude="arm64" if="android" />
+	<architecture name="x86" if="android" />
 
 	<!-- <haxelib name="markdown" /> -->
 	<!-- <haxelib name="HtmlParser" /> -->
